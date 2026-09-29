@@ -6,7 +6,7 @@ function authRequired(req, res, next) {
 
   const [, token] = auth.split(" ");
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET|| 'simba');
     req.user = decoded;
     next();
   } catch {
