@@ -1,40 +1,85 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
   <meta charset="UTF-8">
   <title>Curadoria JWT</title>
 </head>
+
 <body>
- <h1>tentativa de colocar os items aqui em baixo ⬇️⬇️⬇️ 🛐📿</h1>
- <div id="items">
-  
- </div>
+  <h1>tentativa de colocar os items aqui em baixo ⬇️⬇️⬇️ 🛐📿</h1>
+  <div id="items">
 
- <script>
+  </div>
 
-async function carregarItemns() {
-    const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZW1haWwiOiJ0b2J
-  pemluQGdtYWlsLmNvbSIsImlhdCI6MTc5MDg4MDM1OCwiZXhwIjoxNzkwODgxMjU4fQ
-  dYiFKMiyQMFgerZwGLFQw57HYTTn6cC8DFJRBLGwR-s`
+  <script>
+  let global_token;
 
-  const requisição = await fetch('http://localhost:3001/items/',
-    {
-      method: 'GET',
-      headers:{
-        'Autorization':`Bearer ${token}`,
-        'Content-Type':`aplication/json`//indica o que deve ser enviado
-      }
+    async function login() {
+
+      const dadinhos = { 
+      "email": "tobizin@gmail.com",
+      "password": "123"
     }
-  );
 
-  if (!requisição.ok){
-    return console.log("deu ruim ai aruma seu merda")
-  }
+      const requisicao = await fetch('http://localhost:3001/auth/login',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': `application/json`//indica o que deve ser enviado
+          },
+          body: JSON.stringify(dadinhos)
+        }
+      )
+    
+      if(!requisicao.ok){
+        return console.log("o token nao pode ser enviado resolve ai porra (┬┬﹏┬┬)")
+      }
+      const resposta = await requisicao.json();
+      global_token = resposta.accessToken;
+      console.log(global_token)
+    };
+   
   
-}
-       
-  
- </script>
+ 
+
+    async function carregarItemns() {
+      
+
+      const requisicao = await fetch('http://localhost:3001/items/',
+        {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${global_token}`,
+            'Content-Type': `application/json`//indica o que deve ser enviado
+          }
+        }
+      );
+
+      if (!requisicao.ok) {
+        return console.log("deu ruim ai aruma seu merda")
+      }
+      let dados = await requisicao.json();
+      //console.log(JSON.stringify(dados));
+
+      const divItens = document.getElementById("items")
+
+      divItens.innerHTML = dados.map(item => `
+  <h1>titulo:${item.title}<h1>
+    <h2>foto:<a href='${item.url}'> ${item.url} </a><h2>
+        <h3>tags:${item.tags}<h3>
+        <h3>notas:${item.notes}<h3>`)
+    }
+    async function inicio() {
+      await login();
+      await carregarItemns();
+      
+    }
+   inicio();
+
+
+  </script>
 
 </body>
+
 </html>
