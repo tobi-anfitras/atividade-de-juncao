@@ -7,6 +7,34 @@
 </head>
 
 <body>
+    <nav>
+      <input type="button" onclick="cadastrar_usuario()" value="Cadastro">
+      <input type="button" onclick="login()" value="Login">
+      <input type="button" onclick="cadastrar_item()" value="cadastrar item">
+      <input type="button" onclick="listar_itens()" value="Listar Itens">
+    </nav>
+
+  <div id="Div_cadastrar_usuario">
+    <form id="from_cadastro_usuario">
+      <h1>registre aqui⬇️⬇️</h1>
+      <label for="name"">nome</label>
+      <input type="text" name="name"  id="name">
+
+      <label for="email">email</label>
+      <input type="email" name="email"  id="email" >
+
+      <hr>
+      <label for="password">senha</label>
+      <input type="password"  id="password" name="password">
+
+      <label for="comfirmar_password">comfirme sua senha</label>
+      <input type="password" name="confirmar senha" id="confirmar senha">
+
+     <input type="button" value="cadastrar" onclick="processa_cadastro_usuario()">
+    </form>
+    
+  </div>
+
   <h1>tentativa de colocar os items aqui em baixo ⬇️⬇️⬇️ 🛐📿</h1>
   <div id="items">
 
@@ -70,16 +98,74 @@
         <h3>tags:${item.tags}<h3>
         <h3>notas:${item.notes}<h3>`)
     }
+
+    async function registrar() {
+      const usuariozin ={
+        "name":"tobi",
+        "email":"tobilandiiii@gmail.com",
+        "password":"12345"
+      }
+      
+      const requisicao = await fetch('http://localhost:3001/auth/register',
+      {
+      method: 'POST',
+      headers: {
+            'Content-Type': `application/json`//indica o que deve ser enviado
+
+          },
+          body: JSON.stringify(usuariozin)
+      }
+      )
+     
+       const res = await requisicao.json()
+       console.log(res)
+
+      }
+      async function criarItem() {
+        const itemzinho = {
+          "title":"pringous",
+          "url":"https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcSgbsHlSC5_0egQbxplq1v4oeQJdcslV5s2B1tifEx4prJe0X92ChGjZ0sZt3P-ic1FNCOi_hN6DT1Rwn8fEt_tUvpY2yeofwwX6kDUtKQieC9nWtU6-xDkaCA",
+          "notes":"muito bo com acompanhamento se tiver doritus junto hmmmmm uma delicia",
+          "tags":"gostoso,batata,cebola,creme,batata"
+        }
+
+        const requisicao = await fetch('http://localhost:3001/items/',
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${global_token}`,
+            'Content-Type': `application/json`//indica o que deve ser enviado
+          },
+          body: JSON.stringify(itemzinho)
+
+        }
+        );
+        if(!requisicao.ok){
+          return console.log("eu sei o ta acontecendo nao desiste (*/ω＼*)")
+        }
+        const res = await requisicao.json()
+        console.log(res)
+
+        
+      }
+    
+
+    
     async function inicio() {
       await login();
+      //await registrar();
+      //await criarItem();
       await carregarItemns();
+      
+
       
     }
    inicio();
 
 
   </script>
-
+<script src="controleApi.js"></script>
+<script src="controleTela.js"></script>
 </body>
 
 </html>
