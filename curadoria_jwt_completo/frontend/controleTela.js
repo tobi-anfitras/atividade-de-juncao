@@ -15,3 +15,13 @@ async function processa_login() {
 
     rota_api_login(corpo_login)
 }
+
+async function colocagen_de_item() {
+    const form_carregagem = documento.getElementById('form_carregagem')
+    const dados_carregagem = new FormData(form_carregagem)
+    const corpo_items = Object.fromEntries(dados_carregagem.entries())
+    console.log(corpo_items)
+
+    rota_api_items(corpo_items)
+    
+}
