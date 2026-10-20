@@ -6,3 +6,12 @@ async function processa_cadastro_usuario() {
 
     rota_api_register(corpo_payload)
 }
+
+async function processa_login() {
+    const form_login = document.getElementById('form_login')
+    const dados_login = new FormData(form_login)
+    const corpo_login = Object.fromEntries(dados_login.entries())
+    console.log(corpo_login)
+
+    rota_api_login(corpo_login)
+}
