@@ -1,197 +1,516 @@
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
 <head>
-  <meta charset="UTF-8">
-  <title>Curadoria JWT</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curadoria JWT | Anime World</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Nunito:wght@400;500;600;700;800&display=swap');
+
+        :root {
+            --bg: #090816;
+            --panel: rgba(22, 19, 43, 0.92);
+            --pink: #ff4fc8;
+            --purple: #a855f7;
+            --cyan: #55e7ff;
+            --white: #f8f4ff;
+            --muted: #b4accb;
+            --border: rgba(168, 85, 247, 0.35);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            color: var(--white);
+            font-family: 'Nunito', sans-serif;
+            background:
+                radial-gradient(ellipse at 15% 10%, #32104e 0, transparent 38%),
+                radial-gradient(ellipse at 90% 30%, #18274f 0, transparent 35%),
+                linear-gradient(145deg, #090816, #100b20 55%, #080d1b);
+            background-attachment: fixed;
+        }
+
+        /* Linhas decorativas no fundo */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.2;
+            background-image:
+                linear-gradient(rgba(168, 85, 247, 0.12) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(168, 85, 247, 0.12) 1px, transparent 1px);
+            background-size: 42px 42px;
+            mask-image: linear-gradient(to bottom, black, transparent 90%);
+        }
+
+        /* Barra de navegação */
+        nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding: 20px;
+            background: rgba(9, 8, 22, 0.88);
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 5px 30px rgba(168, 85, 247, 0.12);
+            backdrop-filter: blur(15px);
+        }
+
+        nav::before {
+            content: "✦ ANIME WORLD ✦";
+            width: 100%;
+            text-align: center;
+            color: var(--pink);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 5px;
+            margin-bottom: 5px;
+            text-shadow: 0 0 15px rgba(255, 79, 200, 0.8);
+        }
+
+        input[type="button"] {
+            border: 1px solid rgba(255, 79, 200, 0.6);
+            border-radius: 9px;
+            padding: 12px 20px;
+            color: white;
+            background: linear-gradient(135deg, #7e22ce, #be2498);
+            font-family: 'Nunito', sans-serif;
+            font-weight: 800;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.25s ease;
+            box-shadow: 0 0 14px rgba(255, 79, 200, 0.12);
+        }
+
+        input[type="button"]:hover {
+            transform: translateY(-3px);
+            border-color: var(--cyan);
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            box-shadow: 0 0 22px rgba(255, 79, 200, 0.4);
+        }
+
+        /* Cabeçalho principal */
+        .hero {
+            text-align: center;
+            padding: 65px 20px 45px;
+        }
+
+        .hero .simbolo {
+            display: inline-block;
+            font-size: 42px;
+            margin-bottom: 12px;
+            filter: drop-shadow(0 0 18px rgba(255, 79, 200, 0.8));
+            animation: flutuar 3s ease-in-out infinite;
+        }
+
+        .hero h1 {
+            margin: 0;
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(27px, 5vw, 48px);
+            font-weight: 800;
+            letter-spacing: 2px;
+            line-height: 1.35;
+            background: linear-gradient(90deg, #ffffff, #ff8cde, #bba1ff, #55e7ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            filter: drop-shadow(0 0 18px rgba(168, 85, 247, 0.3));
+        }
+
+        .hero p {
+            color: var(--muted);
+            font-size: 16px;
+            margin-top: 14px;
+        }
+
+        .hero .linha {
+            width: 100px;
+            height: 3px;
+            border-radius: 5px;
+            margin: 25px auto 0;
+            background: linear-gradient(90deg, var(--cyan), var(--pink));
+            box-shadow: 0 0 15px var(--pink);
+        }
+
+        /* Área dos formulários */
+        .conteudo {
+            width: min(1100px, 92%);
+            margin: 0 auto;
+            padding-bottom: 60px;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 24px;
+            align-items: start;
+        }
+
+        #Div_cadastrar_usuario,
+        #login_usuario,
+        #novo_item,
+        #formularios_dos_items {
+            padding: 28px;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            background: var(--panel);
+            box-shadow:
+                0 10px 35px rgba(0, 0, 0, 0.25),
+                inset 0 1px rgba(255, 255, 255, 0.035);
+            backdrop-filter: blur(12px);
+            transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #Div_cadastrar_usuario::before,
+        #login_usuario::before,
+        #novo_item::before,
+        #formularios_dos_items::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 22px;
+            width: 75px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--pink), var(--cyan));
+            box-shadow: 0 0 12px var(--pink);
+        }
+
+        #Div_cadastrar_usuario:hover,
+        #login_usuario:hover,
+        #novo_item:hover,
+        #formularios_dos_items:hover {
+            border-color: rgba(255, 79, 200, 0.65);
+            box-shadow: 0 12px 35px rgba(168, 85, 247, 0.13);
+        }
+
+        #Div_cadastrar_usuario h1,
+        #login_usuario h1,
+        #formularios_dos_items h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 19px;
+            line-height: 1.6;
+            color: #ff8cde;
+            margin: 0 0 24px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        label {
+            margin-top: 8px;
+            color: #d9ccef;
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="url"] {
+            width: 100%;
+            min-width: 0;
+            padding: 13px 15px;
+            color: white;
+            background: rgba(8, 7, 22, 0.85);
+            border: 1px solid rgba(168, 85, 247, 0.32);
+            border-radius: 8px;
+            outline: none;
+            font-family: 'Nunito', sans-serif;
+            font-size: 14px;
+            transition: 0.25s ease;
+        }
+
+        input[type="text"]::placeholder,
+        input[type="email"]::placeholder,
+        input[type="password"]::placeholder,
+        input[type="url"]::placeholder {
+            color: #77708e;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus,
+        input[type="url"]:focus {
+            border-color: var(--pink);
+            box-shadow: 0 0 0 3px rgba(255, 79, 200, 0.1),
+                        0 0 15px rgba(255, 79, 200, 0.12);
+        }
+
+        form input[type="button"] {
+            margin-top: 16px;
+            width: 100%;
+            padding: 14px;
+            font-size: 14px;
+        }
+
+        hr {
+            width: 100%;
+            border: 0;
+            border-top: 1px solid var(--border);
+            margin: 10px 0;
+        }
+
+        /* Cadastro de item ocupa uma coluna */
+        #novo_item {
+            grid-column: 1;
+        }
+
+        #formularios_dos_items {
+            grid-column: 2;
+        }
+
+        /* Tabela de itens */
+        #items {
+            width: min(1100px, 92%);
+            margin: 0 auto 60px;
+            padding: 28px;
+            min-height: 100px;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            background: var(--panel);
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.25);
+            overflow-x: auto;
+        }
+
+        #items:empty {
+            display: none;
+        }
+
+        #items h1,
+        #items h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: #ff8cde;
+        }
+
+        #items table {
+            width: 100%;
+            border-collapse: collapse;
+            color: var(--white);
+            text-align: left;
+            font-size: 14px;
+        }
+
+        #items th {
+            padding: 15px;
+            color: var(--cyan);
+            background: rgba(168, 85, 247, 0.16);
+            border-bottom: 1px solid var(--purple);
+            white-space: nowrap;
+        }
+
+        #items td {
+            padding: 15px;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.16);
+            overflow-wrap: anywhere;
+        }
+
+        #items tbody tr:hover {
+            background: rgba(168, 85, 247, 0.1);
+        }
+
+        #items a {
+            color: var(--cyan);
+        }
+
+        /* Rodapé */
+        footer {
+            padding: 24px 15px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: #89819f;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+
+        @keyframes flutuar {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        /* Ajuste para celular */
+        @media (max-width: 720px) {
+            nav {
+                gap: 8px;
+                padding: 15px 10px;
+            }
+
+            nav input[type="button"] {
+                padding: 10px 12px;
+                font-size: 12px;
+            }
+
+            .hero {
+                padding: 45px 18px 35px;
+            }
+
+            .hero p {
+                font-size: 14px;
+            }
+
+            .conteudo {
+                grid-template-columns: 1fr;
+                width: 92%;
+                gap: 18px;
+            }
+
+            #Div_cadastrar_usuario,
+            #login_usuario,
+            #novo_item,
+            #formularios_dos_items {
+                grid-column: 1;
+                padding: 23px 18px;
+            }
+
+            #items {
+                padding: 16px;
+            }
+
+            #items table {
+                min-width: 550px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation: none !important;
+                scroll-behavior: auto !important;
+                transition: none !important;
+            }
+        }
+    </style>
 </head>
 
 <body>
+
     <nav>
-      <input type="button" onclick="cadastrar_usuario()" value="Cadastro">
-      <input type="button" onclick="login()" value="Login">
-      <input type="button" onclick="cadastrar_item()" value="cadastrar item">
-      <input type="button" onclick="listar_itens()" value="Listar Itens">
+        <input type="button" onclick="cadastrar_usuario()" value="Cadastro">
+        <input type="button" onclick="login()" value="Login">
+        <input type="button" onclick="cadastrar_item()" value="Cadastrar item">
+        <input type="button" onclick="listar_itens()" value="Listar Itens">
     </nav>
 
-  <div id="Div_cadastrar_usuario">
-    <form id="from_cadastro_usuario">
-      <h1>registre aqui⬇️⬇️</h1>
-      <label for="name"">nome</label>
-      <input type="text" name="name"  id="name">
+    <header class="hero">
+        <div class="simbolo">🌸</div>
+        <h1>CURADORIA JWT</h1>
+        <p>Seu universo de itens favoritos começa aqui.</p>
+        <p>✦ Explore · Organize · Compartilhe ✦</p>
+        <div class="linha"></div>
+    </header>
 
-      <label for="email">email</label>
-      <input type="email" name="email"  id="email" >
+    <main class="conteudo">
 
-      <hr>
-      <label for="password">senha</label>
-      <input type="password"  id="password" name="password">
+        <div id="Div_cadastrar_usuario">
+            <form id="from_cadastro_usuario">
+                <h1>✧ Registre-se aqui ✧</h1>
 
-      <label for="comfirmar_password">comfirme sua senha</label>
-      <input type="password" name="confirmar senha" id="confirmar senha">
+                <label for="name">Nome</label>
+                <input type="text" name="name" id="name">
 
-     <input type="button" value="cadastrar" onclick="processa_cadastro_usuario()">
-     <hr>
-     <hr>
-    </form>
-    
-  </div>
-  <div id="login_usuario">
-    <form id="form_login">
-      <h1>login aqui😊</h1>
-      <label for="email">email</label>
-      <input type="email" name="email" id="email">
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email">
 
-      <label for="password">senha</label>
-      <input type="password" name="password" id="password">
+                <hr>
 
-      <input type="button" value="logar" onclick="processa_login()">
+                <label for="password">Senha</label>
+                <input type="password" id="password" name="password">
 
-    </form>
+                <label for="comfirmar_password">Confirme sua senha</label>
+                <input type="password" name="confirmar senha" id="confirmar senha">
 
-  </div>
+                <input type="button" value="Cadastrar" onclick="processa_cadastro_usuario()">
 
-  <div id="formularios_dos_items">
-    <form id="form_carregagem">
-      <h1>clique aqui para colocar os items</h1>
-      <input type="button" value="carregar" onclick="colocagen_de_item()">
+                <hr>
+                <hr>
+            </form>
+        </div>
 
-      <div id="aqui"></div>
-    </form>
+        <div id="login_usuario">
+            <form id="form_login">
+                <h1>✧ Bem-vindo de volta ✧</h1>
 
-  </div>
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email">
 
-  <h1>tentativa de colocar os items aqui em baixo ⬇️⬇️⬇️ 🛐📿</h1>
-  <div id="items">
+                <label for="password">Senha</label>
+                <input type="password" name="password" id="password">
 
-  </div>
+                <input type="button" value="Entrar no universo" onclick="processa_login()">
+            </form>
+        </div>
 
-  <script>
-  let global_token;
+        <div id="novo_item">
+            <form id="form_novo_item">
+                <h1>✧ Adicionar novo item ✧</h1>
 
-    async function loginn() {
+                <label for="title">Título</label>
+                <input type="text" name="title" id="title">
 
-      const dadinhos = { 
-      "email": "tobizin@gmail.com",
-      "password": "123"
-    }
+                <label for="url">URL da foto</label>
+                <input type="url" name="url" id="url">
 
-      const requisicao = await fetch('http://localhost:3001/auth/login',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': `application/json`//indica o que deve ser enviado
-          },
-          body: JSON.stringify(dadinhos)
-        }
-      )
-    
-      if(!requisicao.ok){
-        return console.log("o token nao pode ser enviado resolve ai porra (┬┬﹏┬┬)")
-      }
-      const resposta = await requisicao.json();
-      global_token = resposta.accessToken;
-      console.log(global_token)
-    };
-   
-  
- 
+                <label for="tags">Tags sobre o produto</label>
+                <input type="text" name="tags" id="tags">
 
-    async function carregarItemns() {
-      
+                <label for="notes">Notas sobre o produto</label>
+                <input type="text" name="notes" id="notes">
 
-      const requisicao = await fetch('http://localhost:3001/items/',
-        {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${global_token}`,
-            'Content-Type': `application/json`//indica o que deve ser enviado
-          }
-        }
-      );
+                <input type="button" value="✦ Cadastrar item" onclick="processa_cadastro_items()">
+            </form>
+        </div>
 
-      if (!requisicao.ok) {
-        return console.log("deu ruim ai aruma seu merda")
-      }
-      let dados = await requisicao.json();
-      //console.log(JSON.stringify(dados));
+        <div id="formularios_dos_items">
+            <form id="form_carregagem">
+                <h1>✧ Sua coleção ✧</h1>
+                <p style="color: #b4accb; line-height: 1.7;">
+                    Abra sua coleção e veja os itens que você cadastrou.
+                    Cada item faz parte da sua própria história!
+                </p>
 
-      const divItens = document.getElementById("items")
+                <input type="button" value="🌸 Carregar itens" onclick="colocagen_de_item()">
+            </form>
+        </div>
 
-      divItens.innerHTML = dados.map(item => `
-  <h1>titulo:${item.title}<h1>
-    <h2>foto:<a href='${item.url}'> ${item.url} </a><h2>
-        <h3>tags:${item.tags}<h3>
-        <h3>notas:${item.notes}<h3>`)
-    }
+    </main>
 
-    async function registrar() {
-      const usuariozin ={
-        "name":"tobi",
-        "email":"tobilandiiii@gmail.com",
-        "password":"12345"
-      }
-      
-      const requisicao = await fetch('http://localhost:3001/auth/register',
-      {
-      method: 'POST',
-      headers: {
-            'Content-Type': `application/json`//indica o que deve ser enviado
+    <section style="text-align: center; padding: 10px 15px 30px;">
+        <h1 style="font-family: Orbitron, sans-serif; font-size: clamp(18px, 3vw, 25px); color: #ff8cde;">
+            ✦ SUA COLEÇÃO ✦
+        </h1>
+        <p style="color: #b4accb;">Seus itens aparecem logo abaixo.</p>
+    </section>
 
-          },
-          body: JSON.stringify(usuariozin)
-      }
-      )
-     
-       const res = await requisicao.json()
-       console.log(res)
+    <div id="items"></div>
 
-      }
-      async function criarItem() {
-        const itemzinho = {
-          "title":"pringous",
-          "url":"https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcSgbsHlSC5_0egQbxplq1v4oeQJdcslV5s2B1tifEx4prJe0X92ChGjZ0sZt3P-ic1FNCOi_hN6DT1Rwn8fEt_tUvpY2yeofwwX6kDUtKQieC9nWtU6-xDkaCA",
-          "notes":"muito bo com acompanhamento se tiver doritus junto hmmmmm uma delicia",
-          "tags":"gostoso,batata,cebola,creme,batata"
-        }
+    <footer>
+        🌸 CURADORIA JWT · FEITO PARA EXPLORADORES DO UNIVERSO ANIME 🌸
+    </footer>
 
-        const requisicao = await fetch('http://localhost:3001/items/',
-        {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${global_token}`,
-            'Content-Type': `application/json`//indica o que deve ser enviado
-          },
-          body: JSON.stringify(itemzinho)
+    <script src="controleApi.js"></script>
+    <script src="controleTela.js"></script>
 
-        }
-        );
-        if(!requisicao.ok){
-          return console.log("eu sei o ta acontecendo nao desiste (*/ω＼*)")
-        }
-        const res = await requisicao.json()
-        console.log(res)
-
-        
-      }
-    
-
-    
-    async function inicio() {
-      await loginn();
-      //await registrar();
-      //await criarItem();
-      await carregarItemns();
-      
-
-      
-    }
-   inicio();
-
-
-  </script>
-<script src="controleApi.js"></script>
-<script src="controleTela.js"></script>
 </body>
-
 </html>
